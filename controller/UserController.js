@@ -1,4 +1,6 @@
 const UserModel = require('../models/UserModel.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 exports.DefaultController = (req, res) => {
     res.json({
         staus: false,
