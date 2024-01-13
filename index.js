@@ -1,11 +1,13 @@
 require('dotenv').config({path:"./.env"});
 const express = require('express')
 const morgan = require('morgan');
+const cors = require('cors');
 const app = express()
 const UserRoutes = require('./routes/user.js');
 require( './models/config.js');
 require('./models/UserModel.js');
 
+app.use(cors());
 app.use(morgan('tiny'));
 app.use('/user',UserRoutes);
 
