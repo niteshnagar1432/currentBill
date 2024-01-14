@@ -96,7 +96,7 @@ exports.addBalance = async (req, res) => {
             amount,
             currentBalance,
             remainBalance: bank.currentBalance,
-            message: `${bank.name} ₹${amount} added.`
+            message: `${bank.name} ₹${amount} credited.`
         });
 
         if (activity) {
@@ -110,6 +110,43 @@ exports.addBalance = async (req, res) => {
         res.status(500).json({
             status: false,
             error: 'Error adding balance'
+        });
+    }
+};
+
+exports.checkBalance = async (req, res) => {
+    try {
+        const { bankId } = req.body;
+        const { userId } = req.user;
+
+        if (!bankId | !userId) {
+            return res.status(400).json({
+                status: false,
+                message: 'BankId is required to check the balance'
+            });
+        }
+
+        const bank = await BankModel.findOne({ _id: bankId });
+
+        if (!bank) {
+            return res.status(404).json({
+                status: false,
+                message: 'Bank not found'
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: 'Balance checked successfully',
+            bankName: bank.name,
+            availableBalance: bank.currentBalance
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: false,
+            error: 'Error checking balance'
         });
     }
 };

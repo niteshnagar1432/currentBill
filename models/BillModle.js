@@ -9,7 +9,7 @@ const BillSchema = mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'users'
     },
-    ammount:String,
+    amount:String,
     details:String,
     currentBalance:String,
     remainBalance:String,

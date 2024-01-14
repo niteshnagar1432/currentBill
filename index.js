@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express()
 const UserRoutes = require('./routes/user.js');
 const BankRoutes = require('./routes/bank.js');
+const BillRoutes = require('./routes/bills.js');
 require( './models/config.js');
 require('./models/UserModel.js');
 
@@ -13,6 +14,7 @@ app.use(morgan('tiny'));
 app.use(express.json());
 app.use('/user',UserRoutes);
 app.use('/bank',BankRoutes);
+app.use('/bill',BillRoutes);
 
 app.get('*',(req,res)=>{
     res.json({status:false,message:'route not found.'});
