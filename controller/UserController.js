@@ -14,7 +14,7 @@ exports.SignIn = async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'Both username and password are required for sign-in'
             });
@@ -23,7 +23,8 @@ exports.SignIn = async (req, res) => {
         const user = await UserModel.findOne({ username });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({
+            return res.json({
+                status:false,
                 error: 'Invalid credentials'
             });
         }
@@ -32,14 +33,14 @@ exports.SignIn = async (req, res) => {
             expiresIn: '1h'
         });
 
-        res.status(200).json({
+        res.json({
             status:true,
             message:'Login Successfully.',
             token
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
+        res.json({
+            status:false,
             error: 'Error during login'
         });
     }
@@ -49,7 +50,7 @@ exports.SignUp = async (req, res) => {
     const { username, password, name, email } = req.body;
 
     if (!username || !password || !name || !email) {
-        return res.status(400).json({
+        return res.json({
             status: false,
             message: 'All fields are required for sign-up'
         });
@@ -59,7 +60,7 @@ exports.SignUp = async (req, res) => {
         let user = await UserModel.findOne({ email });
 
         if (user) {
-            return res.status(409).json({
+            return res.json({
                 status: false,
                 message: 'User already exists. Please login.'
             });
@@ -79,7 +80,7 @@ exports.SignUp = async (req, res) => {
                 expiresIn: '1h'
             });
 
-            return res.status(201).json({
+            return res.json({
                 status: true,
                 message: 'User created successfully',
                 token
@@ -88,7 +89,7 @@ exports.SignUp = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        res.json({
             status: false,
             error: 'Error creating user'
         });

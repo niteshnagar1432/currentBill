@@ -68,3 +68,39 @@ exports.createBill = async (req, res) => {
         });
     }
 };
+
+exports.allBills = async (req, res) => {
+    let { userId } = req.user;
+
+    if (!userId) {
+        res.json({
+            status: false,
+            message: 'Invalid User ID'
+        });
+    }
+
+    try {
+        const bills = await BillModel.find({ userId })
+            // .populate({
+            //     path: 'userId',
+            //     model: 'UserModel', // Replace with the actual model name for the user
+            // })
+            // .populate({
+            //     path: 'bank', // Corrected from 'banks' to 'bank'
+            //     model: 'BankModel', // Replace with the actual model name for the bank
+            // });
+
+        res.json({
+            status: true,
+            message: 'Bills retrieved successfully',
+            data: bills,
+        });
+    } catch (error) {
+        console.error(error);
+        res.json({
+            status: false,
+            error: 'Error retrieving bills',
+        });
+    }
+};
+
