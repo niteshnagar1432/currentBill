@@ -15,7 +15,7 @@ exports.addBank = async (req, res) => {
         const { userId } = req.user;
 
         if (!name) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'Name is required for adding a bank'
             });
@@ -43,7 +43,7 @@ exports.addBank = async (req, res) => {
             });
 
             if(activity){
-                return res.status(201).json({
+                return res.json({
                     status: true,
                     message: 'Bank added successfully',
                     bank
@@ -51,14 +51,14 @@ exports.addBank = async (req, res) => {
             }
 
         } else {
-            return res.status(500).json({
+            return res.json({
                 status: false,
                 message: 'Failed to add bank'
             });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        res.json({
             status: false,
             error: 'Error adding bank'
         });
@@ -71,7 +71,7 @@ exports.addBalance = async (req, res) => {
         const { userId } = req.user;
 
         if (!bankId || !amount || !userId) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'Both bankId and amount are required to add balance'
             });
@@ -80,14 +80,14 @@ exports.addBalance = async (req, res) => {
         let bank = await BankModel.findOne({ _id: bankId });
 
         if (!bank) {
-            return res.status(404).json({
+            return res.json({
                 status: false,
                 message: 'Bank not found'
             });
         }
 
         let currentBalance = bank.currentBalance;
-        bank.currentBalance = parseInt(bank.currentBalance) + parseInt(amount); // Convert to integers
+        bank.currentBalance = parseInt(bank.currentBalance) + parseInt(amount);
         await bank.save();
 
         let activity = await ActivityModel.create({
@@ -100,14 +100,14 @@ exports.addBalance = async (req, res) => {
         });
 
         if (activity) {
-            return res.status(200).json({
+            return res.json({
                 status: true,
                 message: 'Balance added successfully',
                 bank
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.json({
             status: false,
             error: 'Error adding balance'
         });
@@ -120,7 +120,7 @@ exports.checkBalance = async (req, res) => {
         const { userId } = req.user;
 
         if (!bankId | !userId) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'BankId is required to check the balance'
             });
@@ -129,13 +129,13 @@ exports.checkBalance = async (req, res) => {
         const bank = await BankModel.findOne({ _id: bankId });
 
         if (!bank) {
-            return res.status(404).json({
+            return res.json({
                 status: false,
                 message: 'Bank not found'
             });
         }
 
-        return res.status(200).json({
+        return res.json({
             status: true,
             message: 'Balance checked successfully',
             bankName: bank.name,
@@ -144,7 +144,7 @@ exports.checkBalance = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        res.json({
             status: false,
             error: 'Error checking balance'
         });

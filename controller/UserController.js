@@ -95,3 +95,23 @@ exports.SignUp = async (req, res) => {
         });
     }
 };
+
+exports.BankList = async (req, res) => {
+    try {
+        let { userId } = req.user;
+
+        if (!userId) {
+            return res.json({ status: false, message: "User ID is missing" });
+        }
+
+        let user = await UserModel.findOne({ _id: userId }).populate('banks');
+        
+        // Corrected the syntax issue here
+        let bankNames = user.banks.map((bank) => ({ bankName: bank.name, bankId: bank._id }));
+        
+        res.json({ status: true, banks: bankNames });
+    } catch (error) {
+        console.error(error);
+        res.json({ status: false, message: "Internal Server Error" });
+    }
+};

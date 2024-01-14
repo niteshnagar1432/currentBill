@@ -8,7 +8,7 @@ exports.createBill = async (req, res) => {
         const { userId } = req.user;
 
         if (!bankId || !amount || !details) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'BankId, amount, and details are required to create a bill'
             });
@@ -17,14 +17,14 @@ exports.createBill = async (req, res) => {
         const bank = await BankModel.findOne({ _id: bankId });
 
         if (!bank) {
-            return res.status(404).json({
+            return res.json({
                 status: false,
                 message: 'Bank not found'
             });
         }
 
         if (bank.currentBalance < amount) {
-            return res.status(400).json({
+            return res.json({
                 status: false,
                 message: 'Insufficient funds in your account'
             });
@@ -55,14 +55,14 @@ exports.createBill = async (req, res) => {
         bank.bills.push(bill._id);
         await bank.save();
 
-        return res.status(201).json({
+        return res.json({
             status: true,
             message: 'Bill created successfully',
             bill
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        res.json({
             status: false,
             error: 'Error creating bill'
         });
