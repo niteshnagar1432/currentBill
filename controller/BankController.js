@@ -70,10 +70,10 @@ exports.addBalance = async (req, res) => {
         const { bankId, amount } = req.body;
         const { userId } = req.user;
 
-        if (!bankId || !amount || !userId) {
+        if (!bankId || !amount || !userId || isNaN(parseFloat(amount))) {
             return res.json({
                 status: false,
-                message: 'Both bankId and amount are required to add balance'
+                message: 'Both bankId and a valid numeric amount are required to add balance'
             });
         }
 
@@ -113,6 +113,7 @@ exports.addBalance = async (req, res) => {
         });
     }
 };
+
 
 exports.checkBalance = async (req, res) => {
     try {

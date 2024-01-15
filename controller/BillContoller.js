@@ -7,7 +7,7 @@ exports.createBill = async (req, res) => {
         const { bankId, amount, details } = req.body;
         const { userId } = req.user;
 
-        if (!bankId || !amount || !details) {
+        if (!bankId || !amount || !details || isNaN(parseFloat(amount))) {
             return res.json({
                 status: false,
                 message: 'BankId, amount, and details are required to create a bill'
@@ -80,7 +80,7 @@ exports.allBills = async (req, res) => {
     }
 
     try {
-        const bills = await BillModel.find({ userId })
+        const bills = await BillModel.find({ userId }).sort({ createdAt: -1 });
             // .populate({
             //     path: 'userId',
             //     model: 'UserModel', // Replace with the actual model name for the user

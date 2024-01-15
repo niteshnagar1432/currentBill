@@ -1,6 +1,6 @@
 const express = require('express');
-const { DefaultController, addBank, addBalance, checkBalance } = require('../controller/BankController');
-const { checkToken } = require('../controller/MiddleWare');
+const { DefaultController, addBank, addBalance, checkBalance } = require('../controller/BankController.js');
+const { checkToken } = require('../controller/MiddleWare.js');
 const router = express();
 
 router.get('/',DefaultController);
