@@ -23,14 +23,14 @@ exports.createBill = async (req, res) => {
             });
         }
 
-        if (bank.currentBalance < amount) {
+        if (parseInt(bank.currentBalance) < parseInt(amount)) {
             return res.json({
                 status: false,
                 message: 'Insufficient funds in your account'
             });
         }
 
-        const remainBalance = bank.currentBalance - amount;
+        const remainBalance = parseInt(bank.currentBalance) - parseInt(amount);
 
         const bill = await BillModel.create({
             userId,
